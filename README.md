@@ -55,6 +55,10 @@ localhost:8025<br>
 (二-2) アプリでログアウトをせずに最新の届いたメールでメール認証をするとウェブアプリ「coachtech勤怠管理アプリ」に戻ります。<br>
 (メールに接続しない場合は「認証はこちらから」ボタンを押下すると、認証が完了します)<br>
 
+## 管理者ユーザーとしてログイン
+
+管理者はAdminでのログイン[メールアドレス]admintest@mail.com,[パスワード]admintest<br>
+一般ユーザーはUserでのログイン[メールアドレス]usertest@mail.com,[パスワード]usertestも可能です<br>
 
 ## 使用技術(実行環境)<br>
 
@@ -74,11 +78,6 @@ mailhog v1.0.1<br>
 ユーザー登録：http://localhost/register/<br>
 phpMyAdmin: http://localhost:8080/<br>
 mailhog: http://localhost:8025/<br>
-
-## 管理者ユーザーとしてログイン
-
-管理者はAdminでのログイン[メールアドレス]admintest@mail.com,[パスワード]admintest<br>
-一般ユーザーはUserでのログイン[メールアドレス]usertest@mail.com,[パスワード]usertestも可能です<br>
 
 
 
