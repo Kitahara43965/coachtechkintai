@@ -59,6 +59,7 @@ localhost:8025<br>
 
 管理者はAdminでのログイン[メールアドレス]admintest@mail.com,[パスワード]admintest<br>
 一般ユーザーはUserでのログイン[メールアドレス]usertest@mail.com,[パスワード]usertestも可能です<br>
+この2人にはすでに一回分の勤務記録が入っております。<br>
 
 ## 使用技術(実行環境)<br>
 
