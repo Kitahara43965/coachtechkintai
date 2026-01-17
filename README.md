@@ -66,7 +66,7 @@ mailhog v1.0.1<br>
 
 ## ER 図<br>
 
-
+<img width="781" height="871" alt="Image" src="https://github.com/user-attachments/assets/9509161f-fb68-4bce-bb8b-b4058ba7fc71" />
 
 ## URL
 

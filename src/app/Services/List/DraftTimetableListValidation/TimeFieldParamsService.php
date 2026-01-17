@@ -50,17 +50,17 @@ class TimeFieldParamsService{
                 $isTimeValue = true;
             }else if($fieldKind === $checkoutAtFieldKind){
                 $fieldType = FieldType::VALUE;
-                $hasValueCheck = false;
+                $hasValueCheck = true;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $breakTimeStartAtFieldKind){
                 $fieldType = FieldType::ARRAY;
-                $hasValueCheck = false;
+                $hasValueCheck = true;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $breakTimeEndAtFieldKind){
                 $fieldType = FieldType::ARRAY;
-                $hasValueCheck = false;
+                $hasValueCheck = true;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $descriptionFieldKind){
