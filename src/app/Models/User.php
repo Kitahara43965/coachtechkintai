@@ -7,49 +7,101 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\BreakTime;
+use App\Models\Timetable;
+use App\Models\DraftTimetable;
+use App\Models\DraftBreakTime;
+use App\Constants\UserRole;
+use Illuminate\Support\Facades\Hash;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'name','email','password','username','is_filled_with_profile','postcode','address','building','image'
+        'role',
+        'name',
+        'email',
+        'password',
     ];
 
     protected $hidden = ['password','remember_token'];
     protected $casts = ['email_verified_at' => 'datetime'];
 
-    // 出品/所有商品
-    public function ownedItems()
+    public function setPasswordAttribute($value)
     {
-        return $this->belongsToMany(Item::class, 'user_item')
-                    ->wherePivot('type', 'ownership')
-                    ->withTimestamps();
+        if (!Hash::needsRehash($value)) {
+            $this->attributes['password'] = $value;
+        } else {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 
-    // お気に入り商品
-    public function favoriteItems()
+    public function timetables()
     {
-        return $this->belongsToMany(Item::class, 'user_item')
-                    ->wherePivot('type', 'favorite')
-                    ->withTimestamps();
+        return $this->hasMany(Timetable::class);
     }
 
-    // 購入商品
-    public function purchasedItems(){
-        return $this->belongsToMany(Item::class, 'user_item')
-                ->wherePivot('type', 'purchase')
-                ->withPivot([
-                    'type',
-                    'purchase_quantity',
-                    'price_at_purchase',
-                    'purchased_at',
-                    'purchase_method_id',
-                    'is_filled_with_delivery_address',
-                    'delivery_postcode',
-                    'delivery_address',
-                    'delivery_building',
-                ])
-                ->withTimestamps();
+    public function draftTimetables()
+    {
+        return $this->hasMany(DraftTimetable::class);
+    }
+
+    public function currentTimetable()
+    {
+        return $this->timetables()
+            ->whereNull('checkout_at')
+            ->orderByDesc('checkin_at')
+            ->first();
+    }
+
+    public function currentBreakTime()
+    {
+        return BreakTime::whereNotNull('break_time_start_at')
+            ->whereNull('break_time_end_at')
+            ->whereHas('timetable', fn ($q) =>
+                $q->where('user_id', $this->id)
+                ->whereNull('checkout_at')
+            )
+            ->first();
+    }
+
+    public function currentDraftTimetables()
+    {
+        return $this->draftTimetables()
+            ->whereNull('checkout_at')
+            ->orderByDesc('checkin_at')
+            ->get();
+    }
+
+    public function currentDraftBreakTimes()
+    {
+        return DraftBreakTime::whereNotNull('break_time_start_at')
+            ->whereNull('break_time_end_at')
+            ->whereHas('draftTimetable', fn ($q) =>
+                $q->where('user_id', $this->id)
+                ->whereNull('checkout_at')
+            )
+            ->get();
+    }
+
+    public function isCheckin(){
+
+        $isCheckin = $this->currentTimetable() ? true : false;
+
+        return($isCheckin);
+    }
+
+    public function isBreakTimeStart(){
+
+        $isBreakTimeStart = $this->currentBreakTime() ? true : false;
+
+        return($isBreakTimeStart);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === UserRole::ADMIN;
     }
 }

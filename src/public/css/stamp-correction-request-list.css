@@ -1,0 +1,44 @@
+.stamp-correction-request-list-board {
+    margin: 0 auto;
+    width: 80%;
+    display: block;
+    text-align: center;
+}
+
+/*テーブルに丸みをつける*/
+th:first-child {
+    border-top-left-radius: 10px;
+}
+
+th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.toggle-admission {
+    display: flex;
+    justify-content: start;
+}
+
+.toggle-admission-selected {
+    font-weight: bold;
+}
+
+.toggle-admission-not-selected {
+    font-weight: normal;
+}
+
+.toggle-admission-selected,
+.toggle-admission-not-selected {
+    font-size: 14px;
+    padding: 5px 20px;
+    text-decoration: none;
+    color: black;
+}

@@ -7,26 +7,14 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use App\Constants\LoginType;
 
 class RegisterController extends Controller
 {
-
-    public function show()
-    {
-
-        $isItemList = false;
-        $isMultipleFunctionHeader = false;
-
-        return view('auth.register',compact(
-            'isItemList',
-            'isMultipleFunctionHeader',
-        )); // 登録フォーム用のBlade
-    }
-
-    public function store(RegisterRequest $request)
+    public function registerStore(RegisterRequest $request)
     {
         $user = User::create([
-            'login_time' => 0,
+            'login_time_number' => 0,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),

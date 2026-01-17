@@ -1,162 +1,103 @@
-.lndex-board {
-    margin: 0 auto;
-    width: 100%;
-    display: block;
-}
-
-.index-image-container {
-    position: relative;
-    display: inline-block;
-}
-
-.index-sold-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-30deg); /* 中央＆斜めに */
-    color: red;
-    font-size: 48px; /* お好みで調整 */
-    font-weight: bold;
-    font-family: "Arial Black", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif; /* ゴシック系 */
-    opacity: 1; /* 少し透過しても良い感じ */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 少し影をつけて見やすく */
-    pointer-events: none; /* クリックを画像に通す */
-}
-
-.index-item-image-container {
-    width: 300px;
-    height: 300px;
-    overflow: hidden;
+.index-board {
+    height: 100vh; /* 画面の高さに合わせる */
+    margin: 0 auto; /* margin-top を使わない */
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f9f9f9;
 }
 
-.index-item-image {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-}
-
-.index-item-container-board {
-    margin: 0 auto;
-    width: 90%;
-}
-
-.index-item-card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
-    justify-content: start;
-}
-
-.index-item-card {
-    display: block;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 0px;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-}
-
-.index-item-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.index-item-card-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 12px;
-    background-color: #fff;
-    font-size: 18px;
-}
-
-.index-item-name {
-    color: black;
-}
-
-.index-section-borderline {
-    width: 100%;
-    height: 1px;
-    background-color: black;
-    margin-top: 5px;
-    text-align: left;
-}
-
-.index-user-image-block-upper-blank {
-    margin: 30px 0;
-}
-
-.index-user-image-block {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    margin-left: 0;
-    margin-right: 0;
-    display: flex;
-    justify-content: space-between; /* 両端に配置 */
-    align-items: center;
-    width: 600px;
-    margin: 0 auto;
-    gap: 20px; /* 画像とボタンの間に20pxのスペース */
-}
-
-.index-user-image-block-left {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.index-user-name {
-    width: 200px;
-    margin-left: 30px;
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.index-profile-button {
-    width: fit-content;
-    height: fit-content;
-    margin-left: 0px;
-    padding: 8px 14px;
-    border: 1px solid red;
-    border-radius: 5px;
-    background: #fff;
-    color: red;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 18px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.index-toggle-upper-blank {
-    margin: 30px 0;
-}
-
-.index-toggle-block {
+.index-button-group-container {
     padding: 0;
+    justify-content: center;
+    text-align: center;
 }
 
-.index-toggle-inner-block {
-    margin: 0 100px;
-    width: fit-content;
+.index-button-group {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
 }
 
-.index-toggle-black-text {
-    text-decoration: none;
-    margin: 0 10px;
+.index-environment-status {
+    padding: 3px 10px;
+    width: fit-content;
+    background-color: #ccc;
+    color: black;
+    border-radius: 2000px;
+    text-align: center;
+    font-size: 15px;
+    margin: 0 auto;
+}
+
+.index-checkin-button {
+    display: block;
+}
+
+.index-checkin-button.invisible {
+    display: none;
+}
+
+.index-break-time-start-button {
+    display: block;
+}
+
+.index-break-time-start-button.invisible {
+    display: none;
+}
+
+.index-checkin-button,
+.index-checkin-button.invisible {
+    background-color: black;
+    color: white;
+}
+
+.index-break-time-start-button,
+.index-break-time-start-button.invisible {
+    background-color: white;
     color: black;
 }
 
-.index-toggle-red-text {
-    text-decoration: none;
-    margin: 0 10px;
-    color: red;
+.index-checkin-button,
+.index-checkin-button.invisible,
+.index-break-time-start-button,
+.index-break-time-start-button.invisible {
+    margin: 40px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 15px 35px;
+    width: 180px;
+}
+
+.index-current-year-month-day-weekday {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+
+.index-current-hour-minute {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.good-job {
+    display: block;
+}
+
+.good-job.invisible {
+    display: none;
+}
+
+.good-job,
+.good-job.invisible {
+    margin-top: 40px;
+    font-size: 20px;
 }

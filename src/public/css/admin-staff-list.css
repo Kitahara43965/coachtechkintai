@@ -1,0 +1,22 @@
+.admin-staff-list-board {
+    margin: 0 auto;
+    width: 60%;
+    display: block;
+}
+
+/*テーブルに丸みをつける*/
+th:first-child {
+    border-top-left-radius: 10px;
+}
+
+th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}

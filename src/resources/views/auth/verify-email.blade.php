@@ -4,11 +4,6 @@
     <link rel="stylesheet" href="{{ asset('css/verify-email.css') }}">
 @endsection
 
-<script>
-    const routes = {
-        mypage_profile: "{{ route('mypage.profile') }}",
-    };
-</script>
 
 @section('content')
 
@@ -26,10 +21,11 @@
                 </button>
             </form>
 
-            <form method="POST" action="{{ route('verification.send') }}">
+            <form method="POST" action="{{ route('resendEmail') }}">
                 @csrf
-                <button type="submit" class="verify-email-auth-resend-button">認証メールを再送する</button>
+                    <button type="submit" class="verify-email-auth-resend-button">認証メールを再送する</button>
             </form>
+            
         </div>
     </div>
 

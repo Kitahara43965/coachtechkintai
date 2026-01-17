@@ -23,4 +23,6 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    
 }

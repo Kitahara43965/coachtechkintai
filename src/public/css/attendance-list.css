@@ -1,0 +1,36 @@
+.attendance-list-board {
+    margin: 0 auto;
+    width: 80%;
+    display: block;
+    text-align: center;
+}
+
+.attendance-list-download-button-container {
+    display: flex;
+    justify-content: end;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.attendance-list-download-button {
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+}
+
+/*テーブルに丸みをつける*/
+th:first-child {
+    border-top-left-radius: 10px;
+}
+
+th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}

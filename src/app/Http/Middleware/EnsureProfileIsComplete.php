@@ -25,7 +25,7 @@ class EnsureProfileIsComplete
         // プロフィール未登録なら別ページへ
         if ($user->is_filled_with_profile == false) {
             // 例: プロフィール登録ページに誘導
-            return redirect()->route('mypage.profile')
+            return redirect()->route('index')
                 ->with('error', 'プロフィールを登録してください。');
         }
 

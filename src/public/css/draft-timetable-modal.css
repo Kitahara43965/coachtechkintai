@@ -1,0 +1,71 @@
+.draft-timetable-modal-body {
+    overflow-y: auto; /* 縦スクロール */
+    max-height: 40vh; /* モーダル内でコンテンツが多いときにスクロール */
+    display: flex; /* Flexboxを使って中央配置 */
+    justify-content: center; /* 横方向に中央配置 */
+    text-align: center; /* 中身のテキストも中央に */
+}
+
+.draft-timetable-modal {
+    position: fixed;
+    top: 50%; /* 画面の垂直中央に配置 */
+    left: 50%; /* 画面の横中央に配置 */
+    transform: translate(-50%, -50%); /* 50%の位置からモーダルの幅と高さの半分だけ引く */
+    width: 800px; /* モーダルの幅 */
+    max-width: 100%; /* 最大幅は画面いっぱいに制限 */
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+    z-index: 10; /* モーダル背景が前面に表示されるようにする */
+}
+
+.draft-timetable-modal-content {
+    background-color: white;
+    padding: 20px;
+    max-height: 80vh; /* モーダルの最大高さを画面の80%に制限 */
+    overflow-y: auto; /* コンテンツが多ければスクロール */
+    border-radius: 8px;
+    z-index: 20; /* モーダル内容が前面に表示されるように */
+    display: flex;
+    flex-direction: column; /* コンテンツを縦に配置 */
+    justify-content: flex-start; /* 上から順にコンテンツを配置 */
+}
+
+.draft-timetable-modal-close {
+    font-size: 30px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    color: black;
+    z-index: 30; /* ×ボタンが最前面に表示されるように */
+}
+
+.draft-timetable-modal-button {
+    display: solid;
+    background-color: black;
+    border-radius: 5px;
+    width: 90px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.draft-timetable-modal-button.invisible {
+    display: none;
+}
+
+.draft-timetable-modal-button-message {
+    display: block;
+    color: red;
+}
+
+.draft-timetable-modal-button-message.invisible {
+    display: none;
+}
+
+.draft-timetable-submit-button {
+    display: solid;
+}
+
+.draft-timetable-modal-button-container {
+    display: flex;
+    justify-content: end;
+}

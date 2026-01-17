@@ -1,86 +1,149 @@
 <?php
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DisplayController;
-use App\Http\Controllers\SellController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ShowController;
+use App\Http\Controllers\RedirectController;
+use App\Http\Controllers\DummyTimetableListController;
+use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\TimetableListController;
+use App\Http\Controllers\DraftTimetableController;
+use App\Http\Controllers\DraftTimetableListController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 
+//AdminAttendanceStaff
 
-
-Route::get('/', [ItemController::class, 'index'])
-    ->name('index');
-Route::get('/item/{item_id}',[DisplayController::class, 'evaluate'])
-    ->name('item.item_id');
-Route::get('/register', [RegisterController::class, 'show'])
+Route::get('/register', [ShowController::class, 'register'])
     ->name('register');
-Route::post('/register', [RegisterController::class, 'store'])
-    ->name('register.store');
-Route::get('/login', [LoginController::class, 'show'])
+Route::post('/register', [RegisterController::class, 'registerStore'])
+    ->name('registerStore');
+
+Route::get('/login', [ShowController::class, 'userLogin'])
     ->name('login');
-Route::post('/login', [LoginController::class, 'store'])
-    ->name('login.store');
+
+Route::post('/login', [LoginController::class, 'loginStore'])
+    ->name('loginStore');
+
+Route::get('/admin/login', [ShowController::class, 'adminLogin'])
+    ->name('admin.login');
 
 
 Route::middleware(['auth'])->group(function () {
-    // 認証待ちページ（未認証ユーザー用）
-    Route::get('/email/verify', [VerifyEmailController::class, 'emailVerify'])
+    Route::get('/email/verify', [ShowController::class, 'showEmailVerification'])
         ->name('verification.notice');
-    Route::post('/verify-email', [VerifyEmailController::class,'verifyEmail'])
-        ->name('verification.manual');
+
     Route::post('/logout', [LoginController::class, 'logout'])
         ->name('logout');
+
+    Route::post('/verify-email', [VerifyEmailController::class,'verifyEmail'])
+        ->name('verification.manual');
+
+    Route::post('/resend-email', [VerifyEmailController::class,'resendEmail'])
+        ->name('resendEmail');
+
 });
 
-Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class,'emailVerifyIdHash'])
-    ->middleware(['auth', 'signed', 'throttle:6,1'])
-    ->name('verification.verify');
+Route::middleware(['auth', 'signed', 'throttle:6,1'])->group(function () {
+    Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class,'emailVerifyIdHash'])
+        ->name('verification.verify');
 
+});
 
 Route::middleware(['auth','verified'])->group(function () {
-    Route::get('/mypage/profile', [DisplayController::class, 'profile'])
-        ->name('mypage.profile');
-    Route::post('/mypage/profile', [ProfileController::class, 'update'])
-        ->name('mypage.profile.update');
-    Route::get('/profile/count-images', [ProfileController::class, 'countImages'])
-        ->name('profile.image.count');
+    Route::get('/attendance', [ShowController::class, 'index'])
+        ->name('index');
+    Route::get('/attendance/list', [ShowController::class, 'attendanceList'])
+        ->name('attendanceList');
+
+    Route::get('/attendance/detail/{id}', [ShowController::class, 'attendanceDetailId'])
+        ->name('attendanceDetail.id');
+        
+    Route::get('/redirect-to-attendance-detail-via-attendance-list/{id}', 
+        [RedirectController::class, 'redirectToAttendanceDetailViaAttendanceList'])
+        ->name('redirectToAttendanceDetailViaAttendanceList.id');
+
+     Route::get('/redirect-to-attendance-detail-via-stamp-correction-request-list-for-user/{id}', 
+        [RedirectController::class, 'redirectToAttendanceDetailViaStampCorrectionRequestListForUser'])
+        ->name('redirectToAttendanceDetailViaStampCorrectionRequestListForUser.id');
+
+    Route::post('/update-dummy-timetable-list', [DummyTimetableListController::class, 'updateDummyTimetableList'])
+        ->name('updateDummyTimetableList');
+
+    Route::post("/draft-timetable-modal",[DraftTimetableController::class, 'draftTimetableModal'])
+        ->name('draftTimetableModal');
+    
+    Route::post("/draft-timetable-submit",[DraftTimetableController::class, 'draftTimetableSubmit'])
+        ->name('draftTimetableSubmit');
+
+    Route::post('/draft-timetable-update', [DraftTimetableController::class, 'draftTimetableUpdate'])
+        ->name('draftTimetableUpdate');
+
+    Route::post('/draft-timetable-replace', [DraftTimetableController::class, 'draftTimetableReplace'])
+        ->name('draftTimetableReplace');
+
+    Route::post('/checkin', [TimetableController::class, 'checkin'])
+        ->name('checkin');
+    Route::post('/break-time-start', [TimetableController::class, 'breakTimeStart'])
+        ->name('breakTimeStart');
+
+
+    Route::get('/redirect-to-attendance-list-calendar-update'
+        ,[RedirectController::class, 'redirectToAttendanceListCalendarUpdate'])
+        ->name('redirectToAttendanceListCalendarUpdate');
+
 });
 
-Route::middleware(['auth','verified','profile.complete'])->group(function () {
-    Route::get('/mypage', [ItemController::class, 'mypage'])
-        ->name('mypage');
-    Route::get('/sell', [DisplayController::class, 'add'])
-        ->name('sell');
-    Route::get('/sell/count-images', [SellController::class, 'countImages'])
-        ->name('sell.image.count');
-    Route::post('/sell/store', [SellController::class, 'store'])
-        ->name('sell.store');
-    Route::post('/sell/update/{item_id}', [SellController::class, 'update'])
-        ->name('sell.update.item_id');
-    Route::delete('/sell/delete/{item_id}', [SellController::class, 'delete'])
-        ->name('sell.delete.item_id');
-    Route::get('/purchase/{item_id}', [DisplayController::class, 'purchase'])
-        ->name('purchase.item_id');
-    Route::post('/purchase/{item_id}/update-method', [PurchaseController::class, 'updateMethod'])
-        ->name('purchase.update-method');
-    Route::get('/purchase/address/{item_id}', [DisplayController::class, 'address'])
-        ->name('purchase.address.item_id');
-    Route::post('/purchase/address/update/{item_id}', [PurchaseController::class, 'address'])
-        ->name('purchase.address.update.item_id');
-    Route::get('/item/edit/{item_id}', [DisplayController::class, 'edit'])
-        ->name('item.edit.item_id');
-    Route::post('/item/{item_id}/favorite', [FavoriteController::class, 'toggle'])
-        ->name('item.item_id.favorite');
-    Route::post('/item/{item_id}/comments', [CommentController::class, 'store'])
-        ->name('item.item_id.comments');
-    Route::post('/purchase/store/{item_id}', [PurchaseController::class, 'store'])
-        ->name('purchase.store.item_id');
+Route::middleware(['auth','verified','role:admin'])->group(function () {
+
+    Route::get('/admin/attendance/list', [ShowController::class, 'adminAttendanceList'])
+        ->name('admin.attendanceList');
+
+    Route::get('/admin/attendance/{id}', [ShowController::class, 'adminAttendanceId'])
+        ->name('admin.attendance.id');
+
+    Route::get('/admin/staff/list', [ShowController::class, 'adminStaffList'])
+        ->name('admin.staffList');
+
+    Route::get('/admin/attendance/staff/{id}', [ShowController::class, 'adminAttendanceStaffId'])
+        ->name('admin.attendanceStaff.id');
+
+     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}',
+        [ShowController::class, 'stampCorrectionRequestApproveAttendanceCorrectRequestId'])
+        ->name('stampCorrectionRequestApprove.attendanceCorrectRequestId');
+
+    Route::get('/redirect-to-admin-attendance-via-admin-attendance-list/{id}', 
+        [RedirectController::class, 'redirectToAdminAttendanceViaAdminAttendanceList'])
+        ->name('redirectToAdminAttendanceViaAdminAttendanceList.id');
+
+    Route::get('/redirect-to-admin-attendance-via-admin-attendance-staff/{id}', 
+        [RedirectController::class, 'redirectToAdminAttendanceViaAdminAttendanceStaff'])
+        ->name('redirectToAdminAttendanceViaAdminAttendanceStaff.id');
+
+    Route::get('/redirect-to-stamp-correction-request-approve-via-stamp-correction-request-list-for-admin/{attendance_correct_request_id}', 
+        [RedirectController::class, 'redirectToStampCorrectionRequestApproveViaStampCorrectionRequestListForAdmin'])
+        ->name('redirectToStampCorrectionRequestApproveViaStampCorrectionRequestListForAdmin.id');
+
+    Route::get('/redirect-to-admin-attendance-list-calendar-update',
+        [RedirectController::class, 'redirectToAdminAttendanceListCalendarUpdate'])
+        ->name('redirectToAdminAttendanceListCalendarUpdate');
+
+    Route::get('/redirect-to-admin-attendance-staff-calendar-update/{id}',
+        [RedirectController::class, 'redirectToAdminAttendanceStaffCalendarUpdateId'])
+        ->name('redirectToAdminAttendanceStaffCalendarUpdate.id');
 });
+
+Route::middleware(['auth','verified', 'role:admin,user'])->group(function () {
+    Route::get('/redirect-to-stamp-correction-request-list-not-admitted-update'
+        ,[RedirectController::class, 'redirectToStampCorrectionRequestListNotAdmittedUpdate'])
+        ->name('redirectToStampCorrectionRequestListNotAdmittedUpdate');
+
+    Route::get('/redirect-to-stamp-correction-request-list-admitted-update'
+        ,[RedirectController::class, 'redirectToStampCorrectionRequestListAdmittedUpdate'])
+        ->name('redirectToStampCorrectionRequestListAdmittedUpdate');
+
+    Route::get('/stamp-correction-request/list',[ShowController::class, 'stampCorrectionRequestList'])
+        ->name('stampCorrectionRequestList');
+});
+

@@ -17,6 +17,8 @@
     margin: 30px 0;
     font-size: 18px;
     font-weight: bold;
+    border-radius: 10px;
+    border: 1px solid gray;
 }
 
 .verify-email-auth-resend-button {

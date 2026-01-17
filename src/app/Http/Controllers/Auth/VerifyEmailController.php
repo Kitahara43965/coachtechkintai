@@ -6,71 +6,55 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\BaseController;
+use App\Constants\LoginConstant;
+use App\Constants\UserRole;
+use Illuminate\Http\Request;
 
 class VerifyEmailController extends Controller
 {
-    public function __invoke(EmailVerificationRequest $request)
-    {
-        // 未ログインならメールリンクの {id} から自動ログイン
-        if (!Auth::check()) {
-            Auth::loginUsingId($request->route('id'));
+    static function getStringNameRouteRedirectOnMailVerification($authUser){
+
+        $loginBladeUserRole = UserRole::UNDEFINED;
+        if(session()->has('loginBladeUserRole')){
+            $loginBladeUserRole = session('loginBladeUserRole');
         }
 
-        // すでに認証済みの場合
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect(route('index'))->with('status', 'already-verified');
-        }
-
-        // メールアドレスを認証済みにしてイベント発火
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
-        }
-
-        return redirect(route('index'))->with('status', 'email-verified');
-    }
-
-    public function emailVerify()
-    {
-        $checkLoginTime = BaseController::CHECK_LOGIN_TIME;
-        $user = Auth::user();
-
-        $loginTime = $user->login_time;
-
-        if($user){
-            if($user->hasVerifiedEmail()){
-                if($loginTime <= $checkLoginTime){
-                    $emailVerifyMarker = 1;
-                }else{
-                    $emailVerifyMarker = 0;
-                }
+        if($authUser){
+            if($loginBladeUserRole === UserRole::ADMIN){
+                $stringNameRouteRedirect = "admin.attendanceList";
             }else{
-                $emailVerifyMarker = 2;
+                $stringNameRouteRedirect = "index";
             }
         }else{
-            $emailVerifyMarker = 3;
+            $stringNameRouteRedirect = "inex";
         }
-
-        if($emailVerifyMarker === 0){
-            return redirect()->route('index');
-        }else{
-            return view('auth.verify-email');
-        }
+        
+        return($stringNameRouteRedirect);
     }
 
-
     public function verifyEmail() {
-        $user = Auth::user();
+        $authUser = Auth::user();
         // 認証状態を更新
-        $user->markEmailAsVerified();
+        $authUser->markEmailAsVerified();
+
+        $stringNameRouteRedirect = self::getStringNameRouteRedirectOnMailVerification($authUser);
 
         return redirect()
-            ->route('mypage.profile')
+            ->route($stringNameRouteRedirect)
             ->with('status', 'メール認証が完了しました！');
     }
 
     public function emailVerifyIdHash(EmailVerificationRequest $request){
         $request->fulfill(); // メール認証完了
-        return redirect()->route('mypage.profile'); // 認証後のリダイレクト先
+        $authUser = Auth::user();
+        $stringNameRouteRedirect = self::getStringNameRouteRedirectOnMailVerification($authUser);
+
+        return redirect()->route($stringNameRouteRedirect); // 認証後のリダイレクト先
+    }
+
+    public function resendEmail(Request $request){
+        $user = $request->user();
+        $user->sendEmailVerificationNotification();
+        return redirect()->route('verification.notice')->with('status', 'verification-link-sent');
     }
 }
