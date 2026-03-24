@@ -14,6 +14,7 @@ final class TimeFieldPairErrorStatus
     public const BREAK_TIME_START_DURATION_OVERFLOW = 7;
     public const BREAK_TIME_END_DURATION_OVERFLOW = 8;
     public const BREAK_TIME_OVERLAP = 9;
+    public const ONE_BLANK_ERROR = 10;
 
     public static function message($errorStatus)
     {
@@ -38,6 +39,8 @@ final class TimeFieldPairErrorStatus
                 return '休憩時間もしくは退勤時間が不適切な値です。';
             case self::BREAK_TIME_OVERLAP:
                 return '休憩時間が重なっています。';
+            case self::PAIR_ONE_BLANK_ERROR:
+                return '両方入力もしくは空白にしてください';
             default:
                 return '不明なステータスです。';
         }
