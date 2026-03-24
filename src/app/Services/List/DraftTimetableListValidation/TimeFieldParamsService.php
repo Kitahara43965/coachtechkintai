@@ -45,22 +45,22 @@ class TimeFieldParamsService{
             $isTimeValue = false;
             if($fieldKind === $checkinAtFieldKind){
                 $fieldType = FieldType::VALUE;
-                $hasValueCheck = true;
+                $hasValueCheck = false;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $checkoutAtFieldKind){
                 $fieldType = FieldType::VALUE;
-                $hasValueCheck = true;
+                $hasValueCheck = false;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $breakTimeStartAtFieldKind){
                 $fieldType = FieldType::ARRAY;
-                $hasValueCheck = true;
+                $hasValueCheck = false;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $breakTimeEndAtFieldKind){
                 $fieldType = FieldType::ARRAY;
-                $hasValueCheck = true;
+                $hasValueCheck = false;
                 $hasNoErrorCheck = false;
                 $isTimeValue = true;
             }else if($fieldKind === $descriptionFieldKind){
@@ -333,6 +333,8 @@ class TimeFieldParamsService{
                     }//$endTimeAtTimeFieldErrorStatus
                 }//$timeFieldPairErrorStatus
 
+
+
                 if($fieldKind === $breakTimeStartBreakTimeEndFieldKind){
                     if($panStartTimeAt && $panCheckinAt){
                         if($panStartTimeAt -> lt($panCheckinAt)){
@@ -383,6 +385,22 @@ class TimeFieldParamsService{
                                 $timeFieldPairErrorStatus = TimeFieldPairErrorStatus::EMPTY_BREAK_TIME_START_FILLED_BREAK_TIME_END;
                             }//$fieldKind
                         }//$timeFieldPairErrorStatus
+                    }//$endTimeAtHasValue
+                }//$startTimeAtHasValue
+
+                if($startTimeAtHasValue === false){
+                    if($endTimeAtHasValue === false){
+                    }else if($endTimeAtHasValue === true){
+                        if($timeFieldPairErrorStatus === TimeFieldPairErrorStatus::UNDEFINED){
+                            $timeFieldPairErrorStatus = TimeFieldPairErrorStatus::PAIR_ONE_BLANK_ERROR;
+                        }//$timeFieldPairErrorStatus
+                    }//$endTimeAtHasValue
+                }else if($startTimeAtHasValue === true){
+                    if($endTimeAtHasValue === false){
+                        if($timeFieldPairErrorStatus === TimeFieldPairErrorStatus::UNDEFINED){
+                            $timeFieldPairErrorStatus = TimeFieldPairErrorStatus::PAIR_ONE_BLANK_ERROR;
+                        }//$timeFieldPairErrorStatus
+                    }else if($endTimeAtHasValue === true){
                     }//$endTimeAtHasValue
                 }//$startTimeAtHasValue
 
